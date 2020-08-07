@@ -108,6 +108,9 @@ def recognize_facial_expression(image, on_gpu, face_detection_method, grad_cam):
 
     if face_coordinates is None:
         to_return_fer = FER(image)
+    elif any(x<0 for x in face_coordinates.flatten()) == True:
+        face_coordinates=face_coordinates.clip(0) #Resolve the negative face coordinate issue.
+        #This addition prevent the possible failure due to estimated negative coordinate of tracked face.
     else:
         face = image[face_coordinates[0][1]:face_coordinates[1][1], face_coordinates[0][0]:face_coordinates[1][0], :]
 
